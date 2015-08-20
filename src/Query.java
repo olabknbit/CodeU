@@ -3,7 +3,7 @@ import java.time.LocalDateTime;
 
 
 public class Query {
-   // public Timestamp timestamp;
+    public Timestamp timestamp;
     /*
     some additional fields we don’t care about right now
      */
@@ -11,7 +11,7 @@ public class Query {
     public String words;
 
     public Query(String words){
-        //this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.timestamp = new Timestamp(System.currentTimeMillis());
         this.words = words;
     }
 }
