@@ -55,7 +55,6 @@ public class TrivialDictionary {
     public boolean isInDictionary(String word){
         //assuming we cannot use dictionary.length
 
-
         int left = 0;
         int right = TrivialDictionary.findTheLengthOfDictionary();
         if(right == 0) return false;
@@ -70,12 +69,35 @@ public class TrivialDictionary {
                 right = middle;
             }
             else {
-
                 left = middle;
             }
         }
         return left + 1 == right && word.equals(TrivialDictionary.wordAt(right));
 
+    }
+    public static void main(String[] args) {
+
+        String[] sampleArray = new String[]{"a","b","d","cat", "trial", "ocean","c",""};
+        TrivialDictionary test1 = new TrivialDictionary(sampleArray);
+        //6 times true
+        for(String word : sampleArray) {
+            System.out.println("Word '" +word + "' is in dictionary (" + test1.isInDictionary(word) +")");
+        }
+        String word = "e";
+        //false
+        System.out.println("Word '" + word + "' is in dictionary (" + test1.isInDictionary(word) + ")");
+        TrivialDictionary.setDictionary(new String[]{"ala", "ela", "ela", "co", "cela"});
+        //false
+        System.out.println("Word '" + word + "' is in dictionary (" + test1.isInDictionary(word) + ")");
+        word = "ela";
+        //true
+        System.out.println("Word '" +word + "' is in dictionary (" + test1.isInDictionary(word) + ")");
+        word = "trial";
+        //false
+        System.out.println("Word '" + word + "' is in dictionary (" + test1.isInDictionary(word) + ")");
+        TrivialDictionary.setDictionary(new String[]{});
+        //false
+        System.out.println("Word '" + word + "' is in dictionary (" + test1.isInDictionary(word) + ")");
     }
 
 }
