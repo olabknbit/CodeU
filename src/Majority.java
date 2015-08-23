@@ -1,5 +1,6 @@
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /*
 A collection has a majority if a particular value appears more than 50% of the time.
@@ -16,31 +17,31 @@ public class Majority {
         for(int i = 0; i < collection.length; i++){
             list[i] = collection[i];
         }
-        this.collection = new ArrayList<Integer>(Arrays.asList(list));
+        this.collection = new ArrayList<>(Arrays.asList(list));
     }
     boolean hasMajority(){
 
         Integer[] list = collection.toArray(new Integer[collection.size()]);
         int length = list.length;
-        if(length == 0 ) return false;
-        //Integer[] list = (Integer[]) collection.toArray();
+        if(length == 0 ) {
+            return false;
+        }
         Arrays.sort(list);
 
-        if(list[0].equals( list[length/2] ) ||
-                ( length % 2 == 0 && list[length-1].equals( list[length/2-1] ) ) ||
-                ( length % 2 == 1 && list[length-1].equals( list[length/2] ) ) ){
-            return true;
-        }
-        return false;
+        return list[0].equals(list[length / 2]) ||
+                (length % 2 == 0 && list[length - 1].equals(list[length / 2 - 1])) ||
+                (length % 2 == 1 && list[length - 1].equals(list[length / 2]));
     }
 
     public static void main(String[] args){
         Majority test1 = new Majority(new int[]{ 5, 3, 9, 4, 3, 3, 8, 3, 3 });
         Majority test2 = new Majority(new int[]{ 5, 3, 9, 4, 3, 3, 8, 3 });
         Majority test3 = new Majority(new int[]{});
+        Majority test4 = new Majority(new int[]{1});
         System.out.println("true: " + test1.hasMajority());
         System.out.println("false: " + test2.hasMajority());
         System.out.println("false: " + test3.hasMajority());
+        System.out.println("true: " + test4.hasMajority());
 
 
 
