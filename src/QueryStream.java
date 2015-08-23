@@ -1,7 +1,5 @@
 import java.sql.Timestamp;
-import java.sql.Time;
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  You are working on a system that uses a QueryStream class.
@@ -25,9 +23,7 @@ public class QueryStream {
     public Iterator<String> iterator() {
         return new QueryStreamIterator();
     }
-    boolean hasNext(){
-        return false;
-    }
+
     public class QueryStreamIterator implements Iterator<String> {
 
         private final QueryStream queryStream;
