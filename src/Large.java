@@ -17,18 +17,17 @@ import java.util.Random;
  */
 public class Large {
     int[] numbers;
-    // place to where the numbers are sorted: numbers[sortedIndex] == nthLargest(sortedIndex+1)
 
     public Large(int[] numbers){
         this.numbers = numbers;
     }
-    //swap elemts of numbers array at the specified indexes
+    //swap elements of numbers array at the specified indexes
     void swap(int index1, int index2){
         int temp = numbers[index1];
         numbers[index1] = numbers[index2];
         numbers[index2] = temp;
     }
-    //sort from start inclusive to end exclusive (only parts that matter)
+    //sort from start inclusive to end inclusive (only parts that matter)
     int quicksort(int index, int start, int end){
         if(start == end) {
             return numbers[index];
