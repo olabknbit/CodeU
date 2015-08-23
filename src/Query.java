@@ -9,7 +9,6 @@ public class Query {
      */
     //contains a list of words separated by white space.
     public String words;
-
     public Query(String words){
         this.timestamp = new Timestamp(System.currentTimeMillis());
         this.words = words;
