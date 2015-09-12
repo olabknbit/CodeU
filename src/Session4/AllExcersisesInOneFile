@@ -1,0 +1,262 @@
+package Session4;
+import java.util.ArrayList;
+
+/*
+I used the attribute of a binary representation of a number that made my problem a lot easier: every binary number is
+made up from itself divided by 2 plus a result of modulo operation on itself and 2.
+That way if I had some numbers computed previously I can just use them to get my next number more easily,
+and then just check if it is a palindrome or not, and keep all the record of the palindromes found as well.
+
+ */
+
+public class Palindrome {
+    ArrayList<String> binaryRepresentation;
+    ArrayList<Integer> palindromes;
+
+    public Palindrome(){
+        this.binaryRepresentation = new ArrayList<>();
+        this.palindromes = new ArrayList<>();
+        this.binaryRepresentation.add("0");
+        this.binaryRepresentation.add("1");
+        this.palindromes.add(0);
+        this.palindromes.add(1);
+    }
+
+    int KthBinaryPalindrome(int k){
+        for(int i = binaryRepresentation.size(); palindromes.size() <= k; i++) {
+            String binaryNumber = binaryRepresentation.get(i/2);
+            binaryNumber += i % 2;
+            //System.out.println(binaryNumber);
+            binaryRepresentation.add(binaryNumber);
+            String reversedBinaryNumber = new StringBuffer(binaryNumber).reverse().toString();
+            if(reversedBinaryNumber.equals(binaryNumber)){
+                palindromes.add(i);
+            }
+        }
+        return palindromes.get(k);
+    }
+    public static void main(String[] args){
+        Palindrome p = new Palindrome();
+        for(int i = 0; i < 100; i++) {
+            System.out.println(i + " " + p.KthBinaryPalindrome(i));
+        }
+    }
+}
+
+
+package Session4;
+/*
+I decided to iterate through an input string and treat each index as the middle of my supposed palindrome. My first idea
+was to do it brute force but I discarded the idea quickly and the idea below was my second one. I do not see how I could
+make it faster or more efficient, at least for now. One idea would be to omit the part when I look for the longest sequence
+of the same characters (including my character at ith index). and then stop looking for the palindrome, when
+ it is not longer possible to find the longer one. But I started to wonder if it is worth checking at every iteration
+ if this condition is fulfilled, and decided not to include it.
+*/
+public class LongestPalindrome {
+    public String longest(String string){
+        if(string.length() < 1){
+            return null;
+        }
+        String result = string.substring(0,1);
+        for(int i = 0; i < string.length(); i++){
+            int left = 0;
+            int right = 0;
+            while(i - left > 0 && string.charAt(i) == string.charAt(i - 1 - left)){
+                    left++;
+            }
+            while(i + right < string.length()-1 && string.charAt(i) == string.charAt(i + 1 + right)){
+                    right++;
+            }
+
+            while(i - left > 0 && i + right < string.length()-1 && string.charAt(i - 1 - left) == string.charAt(i + 1 + right)){
+                left++;
+                right++;
+            }
+            if(result.length() <= left+right){
+                result = string.substring(i - left, i + right + 1);
+            }
+        }
+        return result;
+    }
+    public static void main(String[] args){
+        LongestPalindrome longestPalindrome = new LongestPalindrome();
+        System.out.println(longestPalindrome.longest("aa"));
+        System.out.println(longestPalindrome.longest("aba"));
+        System.out.println(longestPalindrome.longest("abaa"));
+        System.out.println(longestPalindrome.longest("12321"));
+        System.out.println(longestPalindrome.longest("1111232100"));
+        System.out.println(longestPalindrome.longest(""));
+
+    }
+}
+
+package Session4;
+/*
+in this excersise I probably compute to much. but I am not sure how to decrease it.
+Also I think I could gain some efficiency by declaring my ascendingList as an attribute of the class and reusing it,
+but to do so I would have to put it into an array or something not to lose data during polling.
+This is what I wrote in around 20-15 minutes and I know it is not very good but at this point I suppose
+I would need some tips from the interviewer in order to know what to do next, or do some research in the web, or maybe
+have like an hour or so to think and analyze it carefully.
+
+ */
+import java.util.PriorityQueue;
+public class UglyNumbers {
+    public int kthUglyNumber(int k){
+        if(k < 1) return 0;
+        PriorityQueue<Integer> ascendingList = new PriorityQueue<>();
+        for(int i = 0; i < k; i++){
+            int number2 = (int) Math.pow(2,i);
+            for(int j = 0; j < k - i; j++){
+                int number3 = number2;
+                number3*= Math.pow(3,j);
+                for(int l = 0; l < k - i - j; l++){
+                    int number5 = number3;
+                    number5 *= Math.pow(5,l);
+                    ascendingList.add(number5);
+                }
+            }
+
+        }
+        for(int i = 1; i < k; i++){
+            ascendingList.poll();
+        }
+        return ascendingList.poll();
+
+    }
+    public static void main(String[] args){
+        UglyNumbers uglyNumbers = new UglyNumbers();
+        for(int i = 0; i < 50; i++){
+            System.out.println(uglyNumbers.kthUglyNumber(i));
+        }
+    }
+}
+
+package Session4;
+
+public class Change {
+
+    int makeChange(int value, int[] coins, int kth){
+        if(coins.length - 1 == kth){
+            if(value % coins[kth] == 0){
+                return 1;
+            }
+            else return 0;
+        }
+        int numberOfWays = 0;
+        while(value >= coins[kth]){
+            numberOfWays += makeChange(value, coins, kth+1);
+            value -= coins[kth];
+        }
+        return value == 0 ? numberOfWays+1 : numberOfWays;
+    }
+    public static void main(String[] args){
+        Change change = new Change();
+        System.out.println("should return 4:" + change.makeChange(10, new int[]{2, 3, 5}, 0));
+        System.out.println("should return 0:" + change.makeChange(1, new int[]{2, 3, 5}, 0));
+        System.out.println("throws an exception - dividing by 0:" + change.makeChange(1, new int[]{0}, 0));
+    }
+}
+
+package Session4;
+import java.util.*;
+/*
+My first question that I would ask an interviewer is:
+what should return this function when applied with a word that is not in the dictionary?
+for example with a dictionary with "abba" and "jack" in it, and asking for split("aja") or split("ajack")??
+should it throw an exception or maybe not change the word at all and return "aja" and "ajack"? or "a jack" in the second case
+Then I thought of how I would write the easy split function:
+    I would iterate through the input string and at each iteration
+    I would check if the first and the second part of it are in the dictionary, if so I would then put those words
+    (merged with a space in between) into the output list.
+Then I started writing this harder function. Firstly I wanted to make a list of all the possiblities on the go,
+but I thought that by making an array of indexes, my function could be more reusable
+At the end I added a dictionary in main and tested it a bit with various inputs
+I am aware that in function makeListOfStrings I could have reused some parts that were already produced,
+but I had no more time to do so. Also I could have written my function split
+so that it would remember all the possible options from the index at which it starts: for example:(given my dictionary in main)
+at index 8 there are 3 possibilities: "a la", "al a", "ala"
+at index 5 there are 4 possibilities: "kot a la", "kotal a", "kot ala", "kota la"
+that way I would remember more but compute less I suppose, but as I wrote,
+ my time which I was suppose to spend on the excersises was already extended a bit so I am submitting just this.
+
+ */
+public class Spliting {
+    Map<String, String> dictionary;
+    ArrayList<String> split(String words){
+        // at each row,(for example at ith row) which represents ith index of a string word,
+        // there are listed indexes at which may start the new string -
+        // for example if we have string alamakotala with the dictionary which contains the words provided in main
+        // at index 5 we have to existing words - "kot" and "kota"
+        // so we put the possible indexes of the next word - 8 and 9 in this row
+        if(words.length() < 1){
+            ArrayList<String> result = new ArrayList<>();
+            result.add("no input");
+            return result;
+        }
+        int[][] indexes = new int[words.length()][];
+        for(int i = 0; i < words.length(); i++){
+            int counterForEachRow = 0;
+            indexes[i] = new int[words.length()-i];
+            for(int j = i+1; j <= words.length(); j++){
+                String word = words.substring(i,j);
+                if(dictionary.containsKey(word)){
+                    indexes[i][counterForEachRow] = j;
+                    counterForEachRow++;
+                }
+            }
+        }
+        ArrayList<String> list = new ArrayList<>();
+        makeListOfStrings(list, indexes,0,0,words,"");
+        if(list.isEmpty()){
+            list.add("The input you provided is incorrect!!!");
+        }
+        return list;
+    }
+
+   void makeListOfStrings(ArrayList<String> list, int[][] indexes, int row, int column, String word, String result){
+       int counter = column;
+
+        while(counter < indexes[row].length && indexes[row][counter] != 0){
+            String result1 = result + word.substring(row, indexes[row][counter]) + " ";
+
+            if(indexes[row][counter] == word.length()){
+                list.add(result1);
+
+            }
+            else makeListOfStrings(list, indexes, indexes[row][counter],0, word, result1);
+            counter ++;
+        }
+    }
+
+    public static void main(String[] args){
+        Spliting spliting = new Spliting();
+        spliting.dictionary = new LinkedHashMap<>(); // konstruktor
+        spliting.dictionary.put("a", "1");
+        spliting.dictionary.put("al","2");
+        spliting.dictionary.put("ala", "3");
+        spliting.dictionary.put("kot", "4");
+        spliting.dictionary.put("kota", "5");
+        spliting.dictionary.put("la","6");
+        spliting.dictionary.put("ma","7");
+        spliting.dictionary.put("makota","8");
+        spliting.dictionary.put("zola", "9");
+        ArrayList <String> list = spliting.split("alamakotala");
+        for(String s : list){
+            System.out.println(s);
+
+        }
+        list = spliting.split("");
+        for(String s : list){
+            System.out.println(s);
+
+        }
+        list = spliting.split("miko");
+        for(String s : list){
+            System.out.println(s);
+
+        }
+    }
+
+}
